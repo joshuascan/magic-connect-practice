@@ -3,13 +3,8 @@ import { Magic } from "magic-sdk";
 import { ConnectExtension } from "@magic-ext/connect";
 import { ethers } from "ethers";
 
-const customNodeOptions = {
-  rpcUrl: "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
-  chainId: 1,
-};
-
 const magic = new Magic("pk_live_645E2FEEEF10DA19", {
-  network: customNodeOptions,
+  network: "mainnet",
   extensions: [new ConnectExtension()],
 });
 
