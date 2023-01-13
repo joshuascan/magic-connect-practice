@@ -20,7 +20,9 @@ function App() {
   };
 
   useEffect(() => {
-    fetchWallet();
+    if (account) {
+      fetchWallet();
+    }
   }, [account]);
 
   const login = async () => {
