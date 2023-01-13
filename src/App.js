@@ -8,7 +8,7 @@ const customNodeOptions = {
   chainId: 1,
 };
 
-const magic = new Magic(process.env.REACT_APP_MAGIC_KEY, {
+const magic = new Magic("pk_live_645E2FEEEF10DA19", {
   network: customNodeOptions,
   extensions: [new ConnectExtension()],
 });
