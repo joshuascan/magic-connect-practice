@@ -1,12 +1,8 @@
 import { useState, useEffect } from "react";
 import { Magic } from "magic-sdk";
-import { ConnectExtension } from "@magic-ext/connect";
 import { ethers } from "ethers";
 
-const magic = new Magic("pk_live_645E2FEEEF10DA19", {
-  network: "mainnet",
-  extensions: [new ConnectExtension()],
-});
+const magic = new Magic("pk_live_645E2FEEEF10DA19");
 
 const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
 
@@ -15,31 +11,29 @@ function App() {
   const [walletInfo, setWalletInfo] = useState(null);
 
   const fetchWallet = async () => {
-    const res = await magic.connect.getWalletInfo();
+    const res = await magic.wallet.getInfo();
     setWalletInfo(res);
+    console.log("wallet info: ", res);
   };
 
   useEffect(() => {
     if (account) {
+      console.log("account: ", account);
       fetchWallet();
     }
   }, [account]);
 
   const login = async () => {
-    provider
-      .listAccounts()
-      .then((accounts) => setAccount(accounts[0]))
-      .catch((error) => console.error(error));
+    const accounts = await magic.wallet.connectWithUI();
+    setAccount(accounts[0]);
   };
 
   const showWallet = () => {
-    magic.connect.showWallet().catch((error) => {
-      console.error(error);
-    });
+    magic.wallet.showUI();
   };
 
   const disconnectWallet = async () => {
-    await magic.connect.disconnect().catch((error) => console.error(error));
+    await magic.wallet.disconnect().catch((error) => console.error(error));
     setAccount(null);
     setWalletInfo(null);
   };
@@ -79,6 +73,12 @@ function App() {
               className="w-52 flex justify-center bg-gray-800 border-gray-700 text-white hover:bg-gray-700 active:bg-gray-500 border rounded-lg font-semibold text-xl mt-8 px-5 py-2.5"
             >
               Show Wallet
+            </button>
+            <button
+              onClick={fetchWallet}
+              className="w-52 flex justify-center bg-gray-800 border-gray-700 text-white hover:bg-gray-700 active:bg-gray-500 border rounded-lg font-semibold text-xl mt-8 px-5 py-2.5"
+            >
+              getInfo
             </button>
             <button
               onClick={disconnectWallet}
